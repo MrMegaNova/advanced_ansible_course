@@ -2,7 +2,10 @@
 # Playbook pour configurer un serveur web
 - name: Configuration d’un serveur web
   hosts: webservers
-  become: true  # Exécuter en mode administrateur
+  remote_user: vagrant
+  become: true
+  become_user: root
+
   vars:
     package_name: "nginx"
     document_root: "/var/www/html"
