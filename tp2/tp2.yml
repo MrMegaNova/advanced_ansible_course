@@ -19,7 +19,7 @@
       ansible.builtin.package_facts:
         manager: auto
 
-    - name: Check whether a package called apache2 is installed
+    - name: Copy index.html if apache2 is installed
       ansible.builtin.copy:
         src: files/index.html
         dest: /var/www/html/index.html
