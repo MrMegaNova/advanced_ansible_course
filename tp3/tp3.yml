@@ -15,6 +15,7 @@
         - apache2
         - mysql-server
       when: ansible_hostname != "node3"
+      tags: apache
 
     - name: Install git, nginx & cowsay on node 3
       ansible.builtin.apt:
@@ -36,19 +37,23 @@
     - name: Gather the rpm package facts
       ansible.builtin.package_facts:
         manager: auto
+      tags: apache
 
     - name: Copy index.html if apache2 or nginx is installed
       ansible.builtin.template:
         src: template/index.j2
         dest: /var/www/html/index.html
         mode: '0644'
+      notify: Restart apache
       when: "'apache2' in ansible_facts.packages or 'nginx' in ansible_facts.packages"
+      tags: apache
 
     - name: Start apache2
       ansible.builtin.service:
         name: apache2
         state: started
       when: "'apache2' in ansible_facts.packages"
+      tags: apache
 
     - name: Start nginx
       ansible.builtin.service:
@@ -61,3 +66,9 @@
         src: template/day.j2
         dest: /etc/jour
         mode: '0644'
+  
+  handlers:
+    - name: Restart apache
+      ansible.builtin.service:
+        name: apache2
+        state: restarted
