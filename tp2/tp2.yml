@@ -8,12 +8,12 @@
   tasks:
     - name: Install apache2 mysql-server
       ansible.builtin.apt:
-        update_cache: yes
+        update_cache: true
         name: "{{ item }}"
         state: present
       loop:
         - apache2
-        - mysql-server  
+        - mysql-server
 
     - name: Gather the rpm package facts
       ansible.builtin.package_facts:
@@ -23,4 +23,5 @@
       ansible.builtin.copy:
         src: files/index.html
         dest: /var/www/html/index.html
-      when: "'apache2' in ansible_facts.packages"     
+        mode: '0644'
+      when: "'apache2' in ansible_facts.packages"

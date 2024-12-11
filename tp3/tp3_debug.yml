@@ -8,7 +8,7 @@
   tasks:
     - name: Install apache2 mysql-server on node 1 & 2
       ansible.builtin.apt:
-        update_cache: yes
+        update_cache: true
         name: "{{ item }}"
         state: present
       loop:
@@ -18,7 +18,7 @@
 
     - name: Install git, nginx & cowsay on node 3
       ansible.builtin.apt:
-        update_cache: yes
+        update_cache: true
         name: "{{ item }}"
         state: present
       loop:
@@ -46,8 +46,8 @@
 
     - name: Start apache2
       ansible.builtin.service:
-          name: apache2
-          state: started
+        name: apache2
+        state: started
       when: "'apache2' in ansible_facts.packages"
 
     - name: Start nginx
@@ -74,11 +74,11 @@
         dest: /etc/jour
         mode: '0644'
 
-    - name: cat file
+    - name: Cat file
       ansible.builtin.command: cat /etc/jour
       register: day
-    
-    - name: show
+      changed_when: false
+
+    - name: Show file content
       ansible.builtin.debug:
         var: day
-
